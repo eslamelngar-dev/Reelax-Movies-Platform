@@ -3,6 +3,8 @@ import { Cairo } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import BackToTop from "@/components/BackToTop";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -25,6 +27,8 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           <main className="min-h-screen">{children}</main>
+          <Footer />
+          <BackToTop />
         </Providers>
       </body>
     </html>
