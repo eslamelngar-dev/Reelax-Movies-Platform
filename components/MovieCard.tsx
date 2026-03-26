@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { Star, Calendar } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { Heart } from "lucide-react";
+import { useFavorites } from "@/hooks/useFavorites";
 
 interface MovieCardProps {
   movie: Movie;
@@ -13,6 +15,7 @@ interface MovieCardProps {
 }
 
 export default function MovieCard({ movie, index = 0 }: MovieCardProps) {
+  const { toggleFavorite, isFavorite } = useFavorites();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -21,6 +24,17 @@ export default function MovieCard({ movie, index = 0 }: MovieCardProps) {
     >
       <Link href={`/movie/${movie.id}`} className="group block">
         <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-white/5">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              toggleFavorite(movie);
+            }}
+            className="absolute top-2 left-2 p-2 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 z-10 hover:scale-110 transition-transform"
+          >
+            <Heart
+              className={`w-4 h-4 ${isFavorite(movie.id) ? "fill-red-500 text-red-500" : "text-white"}`}
+            />
+          </button>
           <Image
             src={tmdb.getImageUrl(movie.poster_path, "w500")}
             alt={movie.title}
