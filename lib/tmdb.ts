@@ -7,8 +7,8 @@ import {
   ReviewsResponse,
 } from "@/types/movie";
 
-const API_KEY = process.env.TMDB_API_KEY;
-const BASE_URL = process.env.TMDB_BASE_URL;
+const API_KEY = process.env.TMDB_API_KEY || "058f95c7ced078c5961ad56d9c169a37";
+const BASE_URL = process.env.TMDB_BASE_URL || "https://api.themoviedb.org/3";
 const LANG = "ar";
 
 async function fetcher<T>(endpoint: string, params: string = ""): Promise<T> {
@@ -16,10 +16,7 @@ async function fetcher<T>(endpoint: string, params: string = ""): Promise<T> {
 
   const res = await fetch(url, { next: { revalidate: 3600 } });
 
-  if (!res.ok) {
-    console.error("Fetch Error URL:", url);
-    throw new Error("Failed to fetch data from TMDB");
-  }
+  if (!res.ok) throw new Error("Failed to fetch");
   return res.json();
 }
 
