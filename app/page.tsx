@@ -1,17 +1,20 @@
+export const dynamic = "force-dynamic";
+
 import { tmdb } from "@/lib/tmdb";
 import Hero from "@/components/Hero";
 import MovieRow from "@/components/MovieRow";
 import { Flame, TrendingUp, Star, Clock, Sparkles } from "lucide-react";
 
 export default async function HomePage() {
-  const [trending, popular, topRated, nowPlaying, upcoming] =
-    await Promise.all([
+  const [trending, popular, topRated, nowPlaying, upcoming] = await Promise.all(
+    [
       tmdb.getTrending(),
       tmdb.getPopular(),
       tmdb.getTopRated(),
       tmdb.getNowPlaying(),
       tmdb.getUpcoming(),
-    ]);
+    ],
+  );
 
   return (
     <>

@@ -4,6 +4,8 @@ import SearchBar from "@/components/SearchBar";
 import { Search as SearchIcon } from "lucide-react";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   searchParams: Promise<{ q?: string; page?: string }>;
 }
@@ -59,7 +61,6 @@ export default async function SearchPage({ searchParams }: Props) {
         <SearchResults query={query} page={currentPage} />
       ) : (
         <div className="text-center py-20">
-          <p className="text-6xl mb-4">🔍</p>
           <p className="text-xl text-gray-400">ابحث عن أفلامك المفضلة</p>
         </div>
       )}

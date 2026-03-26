@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, Clapperboard } from "lucide-react";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ page?: string }>;

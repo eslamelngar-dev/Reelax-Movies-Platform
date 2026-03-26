@@ -15,6 +15,8 @@ import {
   Clapperboard,
 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 const genreIcons: Record<number, React.ReactNode> = {
   28: <Swords className="w-8 h-8" />,
   35: <Laugh className="w-8 h-8" />,
