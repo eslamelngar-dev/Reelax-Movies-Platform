@@ -4,12 +4,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Menu, X, Film, Flame, Clapperboard } from "lucide-react";
+import {
+  Search,
+  Menu,
+  X,
+  Film,
+  Flame,
+  Clapperboard,
+  Heart,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "الرئيسية", icon: Flame },
   { href: "/categories", label: "التصنيفات", icon: Clapperboard },
+  { href: "/favorites", label: "مفضلاتي", icon: Heart },
 ];
 
 export default function Navbar() {
