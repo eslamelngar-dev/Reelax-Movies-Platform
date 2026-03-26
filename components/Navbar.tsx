@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Menu, X, Film, Flame, Clapperboard } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "الرئيسية", icon: Flame },
@@ -17,6 +18,7 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -58,16 +60,25 @@ export default function Navbar() {
             </Link>
 
             <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 text-sm font-medium"
-                >
-                  <link.icon className="w-4 h-4" />
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300 text-sm font-medium ${
+                      isActive
+                        ? "text-red-500 bg-red-500/10 shadow-[0_0_15px_rgba(239,68,68,0.2)]"
+                        : "text-gray-300 hover:text-white hover:bg-white/10"
+                    }`}
+                  >
+                    <link.icon
+                      className={`w-4 h-4 ${isActive ? "text-red-500" : ""}`}
+                    />
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
 
             <div className="flex items-center gap-2">
@@ -103,17 +114,25 @@ export default function Navbar() {
               className="md:hidden bg-black/95 backdrop-blur-xl border-t border-white/10"
             >
               <div className="px-4 py-4 space-y-1">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-all"
-                  >
-                    <link.icon className="w-5 h-5 text-red-500" />
-                    {link.label}
-                  </Link>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300 text-sm font-medium ${
+                        isActive
+                          ? "text-red-500 bg-red-500/10 shadow-[0_0_15px_rgba(239,68,68,0.2)]"
+                          : "text-gray-300 hover:text-white hover:bg-white/10"
+                      }`}
+                    >
+                      <link.icon
+                        className={`w-4 h-4 ${isActive ? "text-red-500" : ""}`}
+                      />
+                      {link.label}
+                    </Link>
+                  );
+                })}
               </div>
             </motion.div>
           )}
