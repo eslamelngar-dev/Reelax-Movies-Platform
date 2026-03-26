@@ -7,13 +7,12 @@ import {
   ReviewsResponse,
 } from "@/types/movie";
 
-const API_KEY = "058f95c7ced078c5961ad56d9c169a37";
-const BASE_URL = "https://api.themoviedb.org/3";
+
 const LANG = "ar";
 
 async function fetcher<T>(endpoint: string, params: string = ""): Promise<T> {
   const res = await fetch(
-    `${BASE_URL}${endpoint}?api_key=${API_KEY}&language=${LANG}${params}`,
+    `${process.env.BASE_URL}${endpoint}?api_key=${process.env.API_KEY}&language=${LANG}${params}`,
     { next: { revalidate: 3600 } },
   );
   if (!res.ok) throw new Error("Failed to fetch");
