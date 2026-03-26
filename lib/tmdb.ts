@@ -7,15 +7,19 @@ import {
   ReviewsResponse,
 } from "@/types/movie";
 
-
+const API_KEY = process.env.TMDB_API_KEY;
+const BASE_URL = process.env.TMDB_BASE_URL;
 const LANG = "ar";
 
 async function fetcher<T>(endpoint: string, params: string = ""): Promise<T> {
-  const res = await fetch(
-    `${process.env.BASE_URL}${endpoint}?api_key=${process.env.API_KEY}&language=${LANG}${params}`,
-    { next: { revalidate: 3600 } },
-  );
-  if (!res.ok) throw new Error("Failed to fetch");
+  const url = `${BASE_URL}${endpoint}?api_key=${API_KEY}&language=${LANG}${params}`;
+
+  const res = await fetch(url, { next: { revalidate: 3600 } });
+
+  if (!res.ok) {
+    console.error("Fetch Error URL:", url);
+    throw new Error("Failed to fetch data from TMDB");
+  }
   return res.json();
 }
 
