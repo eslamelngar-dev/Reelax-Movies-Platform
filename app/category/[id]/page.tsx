@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, Clapperboard } from "lucide-react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { MovieResponse, Genre } from "@/types/movie";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   }
 
   const currentPage = Number(page) || 1;
+
+  let data: MovieResponse;
+  let genres: Genre[];
 
   try {
     [data, { genres }] = await Promise.all([

@@ -46,6 +46,18 @@ export default function Footer() {
               >
                 من نحن
               </Link>
+              <Link
+                href="/contact"
+                className="block text-gray-400 hover:text-red-400 text-sm transition-colors"
+              >
+                تواصل معنا
+              </Link>
+              <Link
+                href="/privacy"
+                className="block text-gray-400 hover:text-red-400 text-sm transition-colors"
+              >
+                سياسة الخصوصية
+              </Link>
             </div>
           </div>
 
