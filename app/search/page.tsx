@@ -1,10 +1,13 @@
 import { tmdb } from "@/lib/tmdb";
 import MovieCard from "@/components/MovieCard";
 import SearchBar from "@/components/SearchBar";
-import { Search as SearchIcon } from "lucide-react";
+import { Search as SearchIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
+
+const MAX_PAGE = 500;
 
 interface Props {
   searchParams: Promise<{ q?: string; page?: string }>;
@@ -12,6 +15,7 @@ interface Props {
 
 async function SearchResults({ query, page }: { query: string; page: number }) {
   const data = await tmdb.searchMovies(query, page);
+  const totalPages = Math.min(data.total_pages, MAX_PAGE);
 
   if (data.results.length === 0) {
     return (
@@ -36,14 +40,42 @@ async function SearchResults({ query, page }: { query: string; page: number }) {
           <MovieCard key={movie.id} movie={movie} index={i} />
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-4 mt-12">
+          {page > 1 && (
+            <Link
+              href={`/search?q=${encodeURIComponent(query)}&page=${page - 1}`}
+              className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors"
+            >
+              <ChevronRight className="w-4 h-4" />
+              السابق
+            </Link>
+          )}
+
+          <span className="px-4 py-3 bg-red-600 rounded-xl font-bold text-sm">
+            {page} / {totalPages}
+          </span>
+
+          {page < totalPages && (
+            <Link
+              href={`/search?q=${encodeURIComponent(query)}&page=${page + 1}`}
+              className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors"
+            >
+              التالي
+              <ChevronLeft className="w-4 h-4" />
+            </Link>
+          )}
+        </div>
+      )}
     </>
   );
 }
 
 export default async function SearchPage({ searchParams }: Props) {
   const { q, page } = await searchParams;
-  const query = q || "";
-  const currentPage = Number(page) || 1;
+  const query = q?.trim() || "";
+  const currentPage = Math.min(Math.max(Number(page) || 1, 1), MAX_PAGE);
 
   return (
     <div className="pt-28 pb-12 max-w-7xl mx-auto px-4 sm:px-6">

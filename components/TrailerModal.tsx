@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
@@ -9,6 +10,23 @@ interface TrailerModalProps {
 }
 
 export default function TrailerModal({ videoKey, onClose }: TrailerModalProps) {
+  useEffect(() => {
+    if (!videoKey) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [videoKey, onClose]);
+
   return (
     <AnimatePresence>
       {videoKey && (
@@ -27,6 +45,8 @@ export default function TrailerModal({ videoKey, onClose }: TrailerModalProps) {
             onClick={(e) => e.stopPropagation()}
           >
             <button
+              type="button"
+              aria-label="إغلاق الفيديو"
               onClick={onClose}
               className="absolute -top-12 left-0 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors z-10"
             >
@@ -34,6 +54,7 @@ export default function TrailerModal({ videoKey, onClose }: TrailerModalProps) {
             </button>
             <iframe
               src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0`}
+              title="مقطع الفيلم"
               allow="autoplay; encrypted-media"
               allowFullScreen
               className="w-full h-full"
