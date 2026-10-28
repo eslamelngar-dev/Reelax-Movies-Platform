@@ -40,6 +40,12 @@ export default function Footer() {
               >
                 البحث
               </Link>
+              <Link
+                href="/about"
+                className="block text-gray-400 hover:text-red-400 text-sm transition-colors"
+              >
+                من نحن
+              </Link>
             </div>
           </div>
 

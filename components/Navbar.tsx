@@ -12,6 +12,7 @@ import {
   Flame,
   Clapperboard,
   Heart,
+  Sparkles,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -19,6 +20,7 @@ const navLinks = [
   { href: "/", label: "الرئيسية", icon: Flame },
   { href: "/categories", label: "التصنيفات", icon: Clapperboard },
   { href: "/favorites", label: "مفضلاتي", icon: Heart },
+  { href: "/about", label: "من نحن", icon: Sparkles },
 ];
 
 export default function Navbar() {

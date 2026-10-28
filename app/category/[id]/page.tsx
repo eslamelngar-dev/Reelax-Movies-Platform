@@ -32,10 +32,20 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   const currentPage = Number(page) || 1;
 
-  const [data, { genres }] = await Promise.all([
-    tmdb.getMoviesByGenre(genreId, currentPage),
-    tmdb.getGenres(),
-  ]);
+  try {
+    [data, { genres }] = await Promise.all([
+      tmdb.getMoviesByGenre(genreId, currentPage),
+      tmdb.getGenres(),
+    ]);
+  } catch {
+    return (
+      <div className="pt-28 pb-20 max-w-2xl mx-auto px-4 text-center">
+        <Clapperboard className="w-16 h-16 text-red-500 mx-auto mb-4" />
+        <h1 className="text-2xl font-black mb-3">حدث خطأ في تحميل التصنيف</h1>
+        <p className="text-gray-400">تأكد من إعداد مفتاح TMDB أو حاول مرة أخرى لاحقاً.</p>
+      </div>
+    );
+  }
 
   const genre = genres.find((g) => g.id === genreId);
 

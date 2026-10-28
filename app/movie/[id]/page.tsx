@@ -59,7 +59,13 @@ export default async function MoviePage({ params }: Props) {
       tmdb.getMovieReviews(movieId),
     ]);
   } catch {
-    notFound();
+    return (
+      <div className="pt-28 pb-20 max-w-2xl mx-auto px-4 text-center">
+        <Film className="w-16 h-16 text-red-500 mx-auto mb-4" />
+        <h1 className="text-2xl font-black mb-3">حدث خطأ في تحميل الفيلم</h1>
+        <p className="text-gray-400">تأكد من إعداد مفتاح TMDB أو حاول مرة أخرى لاحقاً.</p>
+      </div>
+    );
   }
 
   const trailer = videos.results.find(
