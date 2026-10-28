@@ -5,14 +5,16 @@ import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import TrailerModal from "@/components/TrailerModal";
 import StarRating from "@/components/StarRating";
+import { useMovieRating } from "@/hooks/useMovieRating";
 
 interface Props {
+  movieId: number;
   trailerKey: string | null;
 }
 
-export default function MovieDetailsClient({ trailerKey }: Props) {
+export default function MovieDetailsClient({ movieId, trailerKey }: Props) {
   const [showTrailer, setShowTrailer] = useState(false);
-  const [rated, setRated] = useState(false);
+  const { rating, setRating } = useMovieRating(movieId);
 
   return (
     <>
@@ -31,9 +33,10 @@ export default function MovieDetailsClient({ trailerKey }: Props) {
 
         <div className="flex items-center gap-3">
           <span className="text-sm text-gray-400">قيّم الفيلم:</span>
-          <StarRating interactive size={24} onRate={() => setRated(true)} />
-          {rated && (
+          <StarRating interactive size={24} rating={rating} onRate={setRating} />
+          {rating > 0 && (
             <motion.span
+              key={rating}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-green-400 text-xs font-bold"

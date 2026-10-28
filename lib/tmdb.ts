@@ -7,16 +7,25 @@ import {
   ReviewsResponse,
 } from "@/types/movie";
 
-const API_KEY = process.env.TMDB_API_KEY || "058f95c7ced078c5961ad56d9c169a37";
+const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = process.env.TMDB_BASE_URL || "https://api.themoviedb.org/3";
 const LANG = "ar";
 
 async function fetcher<T>(endpoint: string, params: string = ""): Promise<T> {
+  if (!API_KEY) {
+    throw new Error(
+      "TMDB_API_KEY is not set. Add it to your .env.local file (see .env.example).",
+    );
+  }
+
   const url = `${BASE_URL}${endpoint}?api_key=${API_KEY}&language=${LANG}${params}`;
 
   const res = await fetch(url, { next: { revalidate: 3600 } });
 
-  if (!res.ok) throw new Error("Failed to fetch");
+  if (!res.ok) {
+    throw new Error(`TMDB request failed: ${res.status} ${res.statusText}`);
+  }
+
   return res.json();
 }
 
