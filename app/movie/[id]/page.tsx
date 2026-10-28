@@ -1,10 +1,18 @@
 import { tmdb } from "@/lib/tmdb";
+import type {
+  MovieDetails,
+  CreditsResponse,
+  VideosResponse,
+  MovieResponse,
+  ReviewsResponse,
+} from "@/types/movie";
 import Image from "next/image";
 import { Star, Clock, Calendar, Globe, DollarSign, Film } from "lucide-react";
 import MovieRow from "@/components/MovieRow";
 import CastSlider from "@/components/CastSlider";
 import MovieDetailsClient from "./MovieDetailsClient";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -12,24 +20,47 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const movie = await tmdb.getMovieDetails(Number(id));
-  return {
-    title: `${movie.title} | Reelax`,
-    description: movie.overview,
-  };
+  const movieId = Number(id);
+
+  if (!Number.isInteger(movieId) || movieId <= 0) {
+    return { title: "فيلم غير موجود | Reelax" };
+  }
+
+  try {
+    const movie = await tmdb.getMovieDetails(movieId);
+    return {
+      title: `${movie.title} | Reelax`,
+      description: movie.overview,
+    };
+  } catch {
+    return { title: "فيلم غير موجود | Reelax" };
+  }
 }
 
 export default async function MoviePage({ params }: Props) {
   const { id } = await params;
   const movieId = Number(id);
 
-  const [movie, credits, videos, similar, reviews] = await Promise.all([
-    tmdb.getMovieDetails(movieId),
-    tmdb.getMovieCredits(movieId),
-    tmdb.getMovieVideos(movieId),
-    tmdb.getSimilarMovies(movieId),
-    tmdb.getMovieReviews(movieId),
-  ]);
+  if (!Number.isInteger(movieId) || movieId <= 0) {
+    notFound();
+  }
+
+  let movie: MovieDetails;
+  let credits: CreditsResponse;
+  let videos: VideosResponse;
+  let similar: MovieResponse;
+  let reviews: ReviewsResponse;
+  try {
+    [movie, credits, videos, similar, reviews] = await Promise.all([
+      tmdb.getMovieDetails(movieId),
+      tmdb.getMovieCredits(movieId),
+      tmdb.getMovieVideos(movieId),
+      tmdb.getSimilarMovies(movieId),
+      tmdb.getMovieReviews(movieId),
+    ]);
+  } catch {
+    notFound();
+  }
 
   const trailer = videos.results.find(
     (v) => v.type === "Trailer" && v.site === "YouTube",
@@ -132,7 +163,10 @@ export default async function MoviePage({ params }: Props) {
                 {movie.overview || "لا يوجد وصف متاح لهذا الفيلم"}
               </p>
 
-              <MovieDetailsClient trailerKey={trailer?.key || null} />
+              <MovieDetailsClient
+                movieId={movieId}
+                trailerKey={trailer?.key || null}
+              />
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
                 {director && (

@@ -3,10 +3,9 @@
 import { Movie } from "@/types/movie";
 import { tmdb } from "@/lib/tmdb";
 import { motion } from "framer-motion";
-import { Star, Calendar } from "lucide-react";
+import { Star, Calendar, Heart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { Heart } from "lucide-react";
 import { useFavorites } from "@/hooks/useFavorites";
 
 interface MovieCardProps {
@@ -16,25 +15,17 @@ interface MovieCardProps {
 
 export default function MovieCard({ movie, index = 0 }: MovieCardProps) {
   const { toggleFavorite, isFavorite } = useFavorites();
+  const fav = isFavorite(movie.id);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
+      className="relative"
     >
       <Link href={`/movie/${movie.id}`} className="group block">
         <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-white/5">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              toggleFavorite(movie);
-            }}
-            className="absolute top-2 left-2 p-2 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 z-10 hover:scale-110 transition-transform"
-          >
-            <Heart
-              className={`w-4 h-4 ${isFavorite(movie.id) ? "fill-red-500 text-red-500" : "text-white"}`}
-            />
-          </button>
           <Image
             src={tmdb.getImageUrl(movie.poster_path, "w500")}
             alt={movie.title}
@@ -69,6 +60,20 @@ export default function MovieCard({ movie, index = 0 }: MovieCardProps) {
           </h3>
         </div>
       </Link>
+
+      <button
+        type="button"
+        aria-label={fav ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
+        aria-pressed={fav}
+        onClick={() => toggleFavorite(movie)}
+        className="absolute top-2 left-2 p-2 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 z-10 hover:scale-110 transition-transform"
+      >
+        <Heart
+          className={`w-4 h-4 ${
+            fav ? "fill-red-500 text-red-500" : "text-white"
+          }`}
+        />
+      </button>
     </motion.div>
   );
 }

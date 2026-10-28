@@ -2,9 +2,21 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+1. انسخ ملف المتغيرات البيئية وأضف مفتاح TMDb الخاص بك (مجاناً من
+   [themoviedb.org/settings/api](https://www.themoviedb.org/settings/api)):
 
 ```bash
+cp .env.example .env.local
+```
+
+```env
+TMDB_API_KEY=your_tmdb_api_key_here
+```
+
+2. ثبّت الحزم وشغّل خادم التطوير:
+
+```bash
+npm install
 npm run dev
 # or
 yarn dev
@@ -15,6 +27,16 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+> الخط العربي (Cairo) مستضاف محلياً عبر حزمة `@fontsource-variable/cairo`،
+> لذلك لا يحتاج البناء إلى اتصال بخدمات Google Fonts.
+
+## البيئة (Environment Variables)
+
+| المتغير | مطلوب | الوصف |
+| --- | --- | --- |
+| `TMDB_API_KEY` | نعم | مفتاح واجهة TMDb |
+| `TMDB_BASE_URL` | لا | افتراضياً `https://api.themoviedb.org/3` |
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

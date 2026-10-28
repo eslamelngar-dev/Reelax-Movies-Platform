@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
+import "@fontsource-variable/cairo/wght.css";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
-
-const cairo = Cairo({
-  subsets: ["arabic", "latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-});
 
 export const metadata: Metadata = {
   title: "Reelax | استرخي واتفرج",
@@ -23,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl">
-      <body className={cairo.className}>
+      <body>
         <Providers>
           <Navbar />
           <main className="min-h-screen">{children}</main>

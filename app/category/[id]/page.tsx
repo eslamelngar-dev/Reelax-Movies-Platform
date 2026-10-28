@@ -3,6 +3,7 @@ import MovieCard from "@/components/MovieCard";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Clapperboard } from "lucide-react";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const { id } = await params;
   const { page } = await searchParams;
   const genreId = Number(id);
+
+  if (!Number.isInteger(genreId) || genreId <= 0) {
+    notFound();
+  }
+
   const currentPage = Number(page) || 1;
 
   const [data, { genres }] = await Promise.all([
